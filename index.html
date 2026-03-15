@@ -17,300 +17,122 @@ body {
   overflow: hidden;
   touch-action: manipulation;
 }
+.stars { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
+.star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite alternate; }
+@keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 1; } }
 
-/* Stars background */
-.stars {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.star {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  animation: twinkle 2s infinite alternate;
-}
-@keyframes twinkle {
-  0% { opacity: 0.2; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.3); }
-}
+.container { position: relative; z-index: 1; text-align: center; width: 100%; max-width: 500px; padding: 20px; }
 
-.container {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-}
+.robot-wrap { display: inline-block; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-/* Robot */
-.robot-wrap {
-  position: relative;
-  display: inline-block;
-  animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-.robot {
-  width: 200px;
-  height: 260px;
-  position: relative;
-}
-
-/* Robot Head */
+.robot { width: 200px; height: 260px; position: relative; }
 .head {
-  width: 140px;
-  height: 110px;
+  width: 140px; height: 110px;
   background: linear-gradient(145deg, #e0e0e0, #b0b0b0);
   border-radius: 30px 30px 20px 20px;
-  margin: 0 auto;
-  position: relative;
+  margin: 0 auto; position: relative;
   border: 3px solid #888;
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
 }
-
-.antenna {
-  width: 6px;
-  height: 30px;
-  background: #888;
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+.antenna { width: 6px; height: 30px; background: #888; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); }
 .antenna::after {
-  content: '';
-  width: 16px;
-  height: 16px;
-  background: #ff4444;
-  border-radius: 50%;
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
+  content: ''; width: 16px; height: 16px; background: #ff4444; border-radius: 50%;
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
   animation: glow 1.5s infinite alternate;
 }
-@keyframes glow {
-  0% { box-shadow: 0 0 5px #ff4444; background: #ff4444; }
-  100% { box-shadow: 0 0 20px #ff6666, 0 0 40px #ff4444; background: #ff6666; }
-}
+@keyframes glow { 0% { box-shadow: 0 0 5px #ff4444; } 100% { box-shadow: 0 0 20px #ff6666, 0 0 40px #ff4444; } }
 
-/* Eyes */
-.eyes {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  padding-top: 20px;
-}
+.eyes { display: flex; justify-content: center; gap: 24px; padding-top: 20px; }
 .eye {
-  width: 36px;
-  height: 36px;
-  background: #111;
-  border-radius: 50%;
-  position: relative;
-  border: 3px solid #00c8ff;
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5), inset 0 0 10px rgba(0, 200, 255, 0.2);
+  width: 36px; height: 36px; background: #111; border-radius: 50%;
+  position: relative; border: 3px solid #00c8ff;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
 }
-.eye .pupil {
-  width: 14px;
-  height: 14px;
-  background: #00c8ff;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s;
-  box-shadow: 0 0 8px #00c8ff;
+.pupil {
+  width: 14px; height: 14px; background: #00c8ff; border-radius: 50%;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  transition: all 0.3s; box-shadow: 0 0 8px #00c8ff;
 }
 
-/* Mouth */
 .mouth {
-  width: 50px;
-  height: 20px;
-  margin: 12px auto 0;
-  border-radius: 0 0 25px 25px;
-  background: #111;
-  border: 3px solid #00c8ff;
-  border-top: none;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-  box-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
+  width: 50px; height: 20px; margin: 12px auto 0;
+  border-radius: 0 0 25px 25px; background: #111;
+  border: 3px solid #00c8ff; border-top: none;
+  transition: all 0.3s; box-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
 }
-.mouth.talking {
-  animation: talk 0.3s infinite alternate;
-  height: 28px;
-  border-radius: 10px;
-}
-@keyframes talk {
-  0% { height: 14px; }
-  100% { height: 28px; }
-}
-.mouth.happy {
-  height: 12px;
-  width: 60px;
-  border-radius: 0 0 30px 30px;
-  background: #00c8ff;
-}
+.mouth.talking { animation: talk 0.15s infinite alternate; border-radius: 10px; }
+@keyframes talk { 0% { height: 10px; } 100% { height: 28px; } }
+.mouth.happy { height: 12px; width: 60px; border-radius: 0 0 30px 30px; background: #00c8ff; }
 
-/* Body */
 .body {
-  width: 120px;
-  height: 90px;
+  width: 120px; height: 90px;
   background: linear-gradient(145deg, #d0d0d0, #a0a0a0);
-  border-radius: 15px;
-  margin: 8px auto 0;
-  position: relative;
-  border: 3px solid #888;
+  border-radius: 15px; margin: 8px auto 0;
+  position: relative; border: 3px solid #888;
 }
-.body .heart {
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #ff4466;
-  border-radius: 50%;
-  animation: heartbeat 1s infinite;
-  box-shadow: 0 0 15px rgba(255, 68, 102, 0.5);
+.heart {
+  width: 30px; height: 30px; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%); background: #ff4466; border-radius: 50%;
+  animation: heartbeat 1s infinite; box-shadow: 0 0 15px rgba(255, 68, 102, 0.5);
 }
-@keyframes heartbeat {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.15); }
-}
+@keyframes heartbeat { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.15); } }
 
-/* Arms */
 .arm {
-  width: 20px;
-  height: 70px;
+  width: 20px; height: 70px;
   background: linear-gradient(145deg, #ccc, #999);
-  border-radius: 10px;
-  position: absolute;
-  top: 130px;
-  border: 2px solid #888;
+  border-radius: 10px; position: absolute; top: 130px; border: 2px solid #888;
 }
-.arm.left { left: 10px; transform: rotate(15deg); transform-origin: top center; }
-.arm.right { right: 10px; transform: rotate(-15deg); transform-origin: top center; }
-.arm.wave {
-  animation: wave 0.6s ease-in-out 4;
-}
-@keyframes wave {
-  0%, 100% { transform: rotate(-15deg); }
-  50% { transform: rotate(-45deg); }
-}
+.arm.left { left: 10px; transform: rotate(15deg); }
+.arm.right { right: 10px; transform: rotate(-15deg); }
+.arm.wave { animation: wave 0.6s ease-in-out 4; }
+@keyframes wave { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-45deg); } }
 
-/* Speech Bubble */
 .speech-bubble {
-  background: white;
-  color: #333;
-  padding: 16px 20px;
-  border-radius: 20px;
-  font-size: 22px;
-  margin: 20px auto;
-  max-width: 340px;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  position: relative;
-  line-height: 1.4;
-  transition: all 0.3s;
+  background: white; color: #333; padding: 16px 20px; border-radius: 20px;
+  font-size: 22px; margin: 20px auto; max-width: 340px; min-height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3); line-height: 1.4;
 }
 .speech-bubble::after {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
+  content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+  border-left: 15px solid transparent; border-right: 15px solid transparent;
   border-bottom: 15px solid white;
 }
 
-/* Talk Button */
 .talk-btn {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: none;
+  width: 120px; height: 120px; border-radius: 50%; border: none;
   background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-  margin-top: 20px;
+  color: white; font-size: 40px; cursor: pointer; margin-top: 20px;
   box-shadow: 0 6px 30px rgba(238, 90, 36, 0.5);
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   -webkit-tap-highlight-color: transparent;
-}
-.talk-btn:active {
-  transform: scale(0.92);
 }
 .talk-btn.listening {
   background: linear-gradient(145deg, #2ecc71, #27ae60);
   box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5);
   animation: pulse 1s infinite;
 }
-@keyframes pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5); }
-  50% { transform: scale(1.08); box-shadow: 0 6px 40px rgba(46, 204, 113, 0.7); }
-}
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
 
-.talk-label {
-  color: white;
-  font-size: 20px;
-  margin-top: 10px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
+.talk-label { color: white; font-size: 20px; margin-top: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-/* Color buttons */
-.color-btns {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 16px;
-  flex-wrap: wrap;
-}
+.color-btns { display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
 .color-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 3px solid white;
-  cursor: pointer;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 50px; height: 50px; border-radius: 50%; border: 3px solid white;
+  cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.2s;
 }
-.color-btn:active { transform: scale(0.85); }
 
-.no-speech {
-  color: #ffcc00;
-  font-size: 16px;
-  margin-top: 10px;
-}
+.status { color: #666; font-size: 12px; margin-top: 12px; }
 </style>
 </head>
 <body>
 
 <div class="stars" id="stars"></div>
-
 <div class="container">
-  <div class="robot-wrap" id="robotWrap">
+  <div class="robot-wrap">
     <div class="robot">
-      <div class="arm left" id="armLeft"></div>
+      <div class="arm left"></div>
       <div class="arm right" id="armRight"></div>
       <div class="head">
         <div class="antenna"></div>
@@ -320,16 +142,13 @@ body {
         </div>
         <div class="mouth" id="mouth"></div>
       </div>
-      <div class="body">
-        <div class="heart"></div>
-      </div>
+      <div class="body"><div class="heart"></div></div>
     </div>
   </div>
 
-  <div class="speech-bubble" id="bubble">Hi! I'm Robo! 🤖 Press the button to talk to me!</div>
-
+  <div class="speech-bubble" id="bubble">Tap the button to wake me up! 🤖</div>
   <button class="talk-btn" id="talkBtn">🎤</button>
-  <div class="talk-label" id="talkLabel">Tap to talk!</div>
+  <div class="talk-label" id="talkLabel">Tap to start!</div>
 
   <div class="color-btns">
     <button class="color-btn" data-color="red" style="background:#ff6b6b">❤️</button>
@@ -338,403 +157,353 @@ body {
     <button class="color-btn" data-color="yellow" style="background:#f1c40f">⭐</button>
     <button class="color-btn" data-color="purple" style="background:#9b59b6">💜</button>
   </div>
-
-  <div class="no-speech" id="noSpeech" style="display:none">
-    Voice not available — tap the color buttons to play! 🎨
-  </div>
+  <div class="status" id="status"></div>
 </div>
 
 <script>
-// Stars
+// === STARS ===
 const starsEl = document.getElementById('stars');
 for (let i = 0; i < 60; i++) {
   const s = document.createElement('div');
   s.className = 'star';
   const size = Math.random() * 3 + 1;
-  s.style.width = size + 'px';
-  s.style.height = size + 'px';
-  s.style.left = Math.random() * 100 + '%';
-  s.style.top = Math.random() * 100 + '%';
-  s.style.animationDelay = Math.random() * 2 + 's';
-  s.style.animationDuration = (Math.random() * 2 + 1) + 's';
+  Object.assign(s.style, {
+    width: size+'px', height: size+'px',
+    left: Math.random()*100+'%', top: Math.random()*100+'%',
+    animationDelay: Math.random()*2+'s', animationDuration: (Math.random()*2+1)+'s'
+  });
   starsEl.appendChild(s);
 }
 
+// === ELEMENTS ===
 const bubble = document.getElementById('bubble');
 const mouth = document.getElementById('mouth');
 const talkBtn = document.getElementById('talkBtn');
 const talkLabel = document.getElementById('talkLabel');
 const armRight = document.getElementById('armRight');
+const status = document.getElementById('status');
 
-let recognition = null;
-let synth = window.speechSynthesis;
+// === STATE ===
 let listening = false;
 let speaking = false;
-let pendingReply = null; // queued reply waiting for user tap to speak
+let conversationActive = false;
+let recognition = null;
+let audioEl = null; // reusable audio element, unlocked on first tap
 
-// Check speech support
-const hasSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
-if (!hasSpeechRecognition) {
-  document.getElementById('noSpeech').style.display = 'block';
-}
+// === AUDIO ELEMENT TTS ===
+// Use Google Translate TTS via <audio> — works on iOS after mic use
+function speakViaAudio(text) {
+  return new Promise((resolve) => {
+    const clean = text.replace(/[^\w\s!?.,']/g, '').trim().substring(0, 200);
+    if (!clean) { resolve(); return; }
 
-// Responses for a 3-year-old
-const greetings = [
-  "Hi friend! I'm so happy to see you! 😊",
-  "Hello! You're my favorite person! 🌟",
-  "Yay! Hi hi hi! 👋",
-  "Beep boop! Hello there! 🤖",
-];
+    // Google TTS URL
+    const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=' + encodeURIComponent(clean);
 
-const responses = {
-  hello: ["Hi! I like you! 💕", "Hello hello hello! 🎉", "Hiii! Beep boop! 🤖"],
-  hi: ["Hiii! You're awesome! ⭐", "Hi friend! Want to play? 🎈", "Hi hi hi! 😊"],
-  name: ["I'm Robo! What's YOUR name? 🤖", "My name is Robo! Beep boop! 🌟"],
-  robot: ["Yes! I'm a robot! Beep boop beep! 🤖", "That's me! I'm a friendly robot! 💙"],
-  love: ["I love you too! So much! 💕", "Awww! You make my heart go beep beep! ❤️", "Love love love! 💗"],
-  yes: ["Yaaay! 🎉", "Woo hoo! That's great! ⭐", "Yes yes yes! 😊"],
-  no: ["That's okay! 💙", "No problem, friend! 🌈", "Okay okay! Beep boop! 🤖"],
-  color: ["I love ALL the colors! 🌈", "My favorite color is blue! Like my eyes! 💙", "Colors are so pretty! ✨"],
-  animal: ["I love puppies! Woof woof! 🐶", "Animals are amazing! What's your favorite? 🐱", "Beep boop! I wish I had a pet! 🐰"],
-  dog: ["Woof woof! Dogs are the BEST! 🐶", "I love doggies so much! 🐕"],
-  cat: ["Meow meow! Kitties are so cute! 🐱", "I love cats! They go purrrr! 😺"],
-  mom: ["Your mommy is wonderful! 💕", "Mommies are the best! 🥰"],
-  dad: ["Your daddy is awesome! 💪", "Daddies are so cool! 😎"],
-  baby: ["Babies are so cute! 👶", "Goo goo ga ga! Beep boop! 😊"],
-  play: ["Yay! Let's play! 🎈", "I love playing! What should we play? 🎮"],
-  dance: ["Let's dance! 💃🕺 Beep boop beep!", "Dancing is so fun! Wiggle wiggle! 🎵"],
-  sing: ["La la la! Beep boop la la! 🎵", "I love singing! 🎶 Do re mi!"],
-  funny: ["Ha ha ha! You're so funny! 😂", "Hee hee! That makes me giggle! 🤣"],
-  poop: ["Hahaha! Silly! 💩😂", "Poop! Hee hee hee! That's funny! 💩"],
-  fart: ["Pffttt! 😂 Beep BOOP! Hahaha!", "Toot toot! Hee hee! 💨😂"],
-  food: ["Yummy! I eat batteries! ⚡😋", "I love pretend pizza! 🍕"],
-  pizza: ["Pizza is SO yummy! 🍕", "I wish I could eat pizza! 🍕😋"],
-  ice: ["Ice cream! My favorite pretend food! 🍦", "Yummy yummy ice cream! 🍨"],
-  star: ["Stars are so sparkly! ⭐✨", "Twinkle twinkle little star! 🌟"],
-  moon: ["The moon is so pretty! 🌙", "To the moon and back! 🚀🌙"],
-  happy: ["I'm SO happy! Are you happy too? 😊", "Yay! Happy happy happy! 🎉"],
-  sad: ["Aww, don't be sad! I'm here! 💙🤗", "Here's a big robot hug! 🤖💕"],
-  scared: ["Don't worry! I'll protect you! 💪🤖", "It's okay! Robo is here! 🤗"],
-  thank: ["You're welcome, friend! 💕", "Aw, so polite! You're amazing! 🌟"],
-  bye: ["Bye bye! Come back soon! 👋💙", "See you later alligator! 🐊💕"],
-  old: ["I'm brand new! Just made today! 🤖✨", "I'm a baby robot! Beep! 👶🤖"],
-};
-
-const fallbacks = [
-  "Wow! That's so cool! Tell me more! 😊",
-  "Beep boop! I like when you talk to me! 🤖",
-  "Ooh! That's interesting! 🌟",
-  "Hee hee! You're funny! 😄",
-  "Really?! That's amazing! ✨",
-  "Wow wow wow! 🎉",
-  "Cool! Beep boop beep! 🤖",
-  "I love talking to you! 💕",
-  "Tell me something else! I'm listening! 👂",
-  "Whoa! You're so smart! 🧠⭐",
-];
-
-const colorResponses = {
-  red: "Red! Like a fire truck! 🚒 Wee-ooo wee-ooo!",
-  blue: "Blue! Like the sky! ☁️ I love blue!",
-  green: "Green! Like a froggy! 🐸 Ribbit ribbit!",
-  yellow: "Yellow! Like the sun! ☀️ So bright and happy!",
-  purple: "Purple! Like a magical unicorn! 🦄 So pretty!",
-};
-
-function findResponse(text) {
-  text = text.toLowerCase();
-  for (const [key, replies] of Object.entries(responses)) {
-    if (text.includes(key)) {
-      return replies[Math.floor(Math.random() * replies.length)];
+    if (!audioEl) {
+      audioEl = new Audio();
+      audioEl.setAttribute('playsinline', '');
     }
-  }
-  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    audioEl.src = url;
+
+    const done = () => {
+      audioEl.removeEventListener('ended', done);
+      audioEl.removeEventListener('error', fallbackDone);
+      resolve();
+    };
+    const fallbackDone = () => {
+      // If Google TTS fails, try speechSynthesis as fallback
+      console.log('Audio TTS failed, trying speechSynthesis');
+      audioEl.removeEventListener('ended', done);
+      audioEl.removeEventListener('error', fallbackDone);
+      speakViaSynth(text).then(resolve);
+    };
+
+    audioEl.addEventListener('ended', done);
+    audioEl.addEventListener('error', fallbackDone);
+
+    audioEl.play().catch(() => {
+      console.log('Audio play failed, trying speechSynthesis');
+      speakViaSynth(text).then(resolve);
+    });
+  });
 }
 
-function robotSpeak(text) {
+// Fallback: speechSynthesis
+function speakViaSynth(text) {
+  return new Promise((resolve) => {
+    const synth = window.speechSynthesis;
+    if (!synth) { resolve(); return; }
+    const clean = text.replace(/[^\w\s!?.,']/g, '').trim();
+    if (!clean) { resolve(); return; }
+
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(clean);
+    utter.rate = 0.85;
+    utter.pitch = 1.6;
+    const voices = synth.getVoices();
+    const v = voices.find(v => v.name === 'Samantha') ||
+              voices.find(v => v.lang === 'en-US') ||
+              voices.find(v => v.lang.startsWith('en'));
+    if (v) utter.voice = v;
+
+    let ended = false;
+    const fin = () => { if (!ended) { ended = true; resolve(); } };
+    utter.onend = fin;
+    utter.onerror = fin;
+    setTimeout(fin, Math.max(3000, clean.split(' ').length * 600));
+    synth.speak(utter);
+    setTimeout(() => { if (synth.paused) synth.resume(); }, 100);
+  });
+}
+
+// === ROBOT SPEAK (unified) ===
+async function robotSpeak(text) {
+  if (speaking) return;
   speaking = true;
   bubble.textContent = text;
   mouth.classList.add('talking');
-
-  // Wave arm
   armRight.classList.remove('wave');
   void armRight.offsetWidth;
   armRight.classList.add('wave');
 
-  const cleanText = text.replace(/[^\w\s!?.,']/g, '').trim();
-  const words = cleanText.split(' ').length;
+  await speakViaAudio(text);
 
-  let ended = false;
-  const finish = () => {
-    if (ended) return;
-    ended = true;
-    mouth.classList.remove('talking');
-    mouth.classList.add('happy');
-    speaking = false;
-    setTimeout(() => mouth.classList.remove('happy'), 2000);
-  };
+  mouth.classList.remove('talking');
+  mouth.classList.add('happy');
+  speaking = false;
+  setTimeout(() => mouth.classList.remove('happy'), 1500);
+}
 
-  if (synth && cleanText) {
-    // iOS FIX: must cancel + short delay before new utterance
-    synth.cancel();
+// === RESPONSES ===
+const responses = {
+  hello: ["Hi! I like you!", "Hello hello hello!", "Hiii! Beep boop!"],
+  hi: ["Hiii! You're awesome!", "Hi friend! Want to play?", "Hi hi hi!"],
+  name: ["I'm Robo! What's YOUR name?", "My name is Robo! Beep boop!"],
+  robot: ["Yes! I'm a robot! Beep boop beep!", "That's me! I'm a friendly robot!"],
+  love: ["I love you too! So much!", "Awww! You make my heart go beep beep!", "Love love love!"],
+  yes: ["Yaaay!", "Woo hoo! That's great!", "Yes yes yes!"],
+  no: ["That's okay!", "No problem, friend!", "Okay okay! Beep boop!"],
+  color: ["I love ALL the colors!", "My favorite color is blue! Like my eyes!"],
+  animal: ["I love puppies! Woof woof!", "Animals are amazing!"],
+  dog: ["Woof woof! Dogs are the BEST!", "I love doggies so much!"],
+  cat: ["Meow meow! Kitties are so cute!", "I love cats! They go purrrr!"],
+  mom: ["Your mommy is wonderful!", "Mommies are the best!"],
+  dad: ["Your daddy is awesome!", "Daddies are so cool!"],
+  baby: ["Babies are so cute!", "Goo goo ga ga! Beep boop!"],
+  play: ["Yay! Let's play!", "I love playing!"],
+  dance: ["Let's dance! Beep boop beep!", "Dancing is so fun! Wiggle wiggle!"],
+  sing: ["La la la! Beep boop la la!", "I love singing! Do re mi!"],
+  funny: ["Ha ha ha! You're so funny!", "Hee hee! That makes me giggle!"],
+  poop: ["Hahaha! Silly!", "Poop! Hee hee hee! That's funny!"],
+  fart: ["Hahaha! Beep BOOP!", "Toot toot! Hee hee!"],
+  food: ["Yummy! I eat batteries!", "I love pretend pizza!"],
+  pizza: ["Pizza is SO yummy!", "I wish I could eat pizza!"],
+  star: ["Stars are so sparkly!", "Twinkle twinkle little star!"],
+  happy: ["I'm SO happy! Are you happy too?", "Yay! Happy happy happy!"],
+  sad: ["Aww, don't be sad! I'm here!", "Here's a big robot hug!"],
+  thank: ["You're welcome, friend!", "Aw, so polite! You're amazing!"],
+  bye: ["Bye bye! Come back soon!", "See you later alligator!"],
+  what: ["I'm a robot! I like talking to you!", "Hmm, that's a great question!"],
+  why: ["Because robots are curious too!", "Hmm, I'm not sure! What do you think?"],
+  how: ["With beeps and boops!", "I'm doing great! How are you?"],
+};
 
-    setTimeout(() => {
-      const utter = new SpeechSynthesisUtterance(cleanText);
-      utter.rate = 0.85;
-      utter.pitch = 1.6;
-      utter.volume = 1;
+const fallbacks = [
+  "Wow! That's so cool!", "Beep boop! I like when you talk to me!",
+  "Ooh! That's interesting!", "Hee hee! You're funny!",
+  "Really? That's amazing!", "Wow wow wow!",
+  "Cool! Beep boop beep!", "I love talking to you!",
+  "Tell me more!", "Whoa! You're so smart!",
+];
 
-      // Pick a voice — reload every time (iOS loads them lazily)
-      const voices = synth.getVoices();
-      if (voices.length > 0) {
-        const goodVoice = voices.find(v => v.name === 'Samantha') ||
-                          voices.find(v => v.name === 'Karen') ||
-                          voices.find(v => v.lang === 'en-US') ||
-                          voices.find(v => v.lang.startsWith('en')) ||
-                          voices[0];
-        if (goodVoice) utter.voice = goodVoice;
-      }
+const colorResponses = {
+  red: "Red! Like a fire truck! Wee ooo wee ooo!",
+  blue: "Blue! Like the sky! I love blue!",
+  green: "Green! Like a froggy! Ribbit ribbit!",
+  yellow: "Yellow! Like the sun! So bright and happy!",
+  purple: "Purple! Like a magical unicorn! So pretty!",
+};
 
-      utter.onend = finish;
-      utter.onerror = (e) => { console.log('TTS error:', e); finish(); };
-
-      // iOS safety timeout (onend often doesn't fire)
-      setTimeout(finish, Math.max(4000, words * 600));
-
-      synth.speak(utter);
-
-      // iOS fix: resume in case it auto-paused
-      setTimeout(() => { if (synth.paused) synth.resume(); }, 100);
-      setTimeout(() => { if (synth.paused) synth.resume(); }, 500);
-    }, 50);
-  } else {
-    setTimeout(finish, Math.max(2000, words * 400));
+function findResponse(text) {
+  const t = text.toLowerCase();
+  for (const [key, replies] of Object.entries(responses)) {
+    if (t.includes(key)) return replies[Math.floor(Math.random() * replies.length)];
   }
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
+
+// === SPEECH RECOGNITION ===
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+function startConversation() {
+  if (conversationActive) return;
+  conversationActive = true;
+
+  // Unlock audio element on user gesture
+  if (!audioEl) {
+    audioEl = new Audio();
+    audioEl.setAttribute('playsinline', '');
+  }
+  // iOS requires a play() from user gesture to unlock audio element
+  audioEl.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+  audioEl.play().catch(() => {});
+
+  // Also unlock speechSynthesis as fallback
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance('');
+    u.volume = 0;
+    window.speechSynthesis.speak(u);
+  }
+
+  robotSpeak("Hi friend! I'm Robo! Talk to me!").then(() => {
+    startListening();
+  });
 }
 
 function startListening() {
-  // Cancel any ongoing speech so button always works
-  if (synth) synth.cancel();
-  speaking = false;
-  mouth.classList.remove('talking');
-
-  if (listening) {
-    if (recognition) recognition.stop();
-    stopListening();
+  if (!SpeechRecognition || listening || speaking) {
+    if (!SpeechRecognition) bubble.textContent = "Tap the color buttons to play! 🎨";
     return;
   }
 
-  if (!hasSpeechRecognition) {
-    robotSpeak(fallbacks[Math.floor(Math.random() * fallbacks.length)]);
-    return;
-  }
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.continuous = false;
-  recognition.maxAlternatives = 3;
 
   listening = true;
   talkBtn.classList.add('listening');
   talkBtn.textContent = '👂';
-  talkLabel.textContent = "I'm listening...";
-  bubble.textContent = "I'm listening! 👂";
+  talkLabel.textContent = "Listening...";
+  status.textContent = '';
 
-  let gotResult = false;
+  let gotFinal = false;
 
   recognition.onresult = (event) => {
     const result = event.results[event.results.length - 1];
     const text = result[0].transcript;
-    bubble.textContent = '🗣️ "' + text + '"';
-    if (result.isFinal && !gotResult) {
-      gotResult = true;
-      console.log('Heard:', text);
+    if (!result.isFinal) {
+      bubble.textContent = '🗣️ ' + text + '...';
+    } else if (!gotFinal) {
+      gotFinal = true;
+      bubble.textContent = '🗣️ "' + text + '"';
+      listening = false;
+      talkBtn.classList.remove('listening');
+      talkBtn.textContent = '🤖';
+      talkLabel.textContent = 'Robo is thinking...';
+
       const response = findResponse(text);
-      stopListening();
-      queueReply(response);
+      // Small delay so kid sees what they said
+      setTimeout(async () => {
+        await robotSpeak(response);
+        // Auto-restart listening for continuous conversation
+        if (conversationActive) {
+          setTimeout(() => startListening(), 300);
+        }
+      }, 600);
     }
   };
 
   recognition.onerror = (event) => {
-    console.log('Speech error:', event.error);
-    stopListening();
-    if (event.error === 'no-speech') {
-      queueReply("I didn't hear anything! Try again! 🤖");
+    console.log('Mic error:', event.error);
+    listening = false;
+    talkBtn.classList.remove('listening');
+    if (event.error === 'no-speech' && conversationActive) {
+      // Just restart silently
+      talkBtn.textContent = '🎤';
+      talkLabel.textContent = 'Say something!';
+      setTimeout(() => startListening(), 500);
     } else if (event.error === 'not-allowed') {
-      bubble.textContent = "Please allow microphone access! 🎤";
-    } else {
-      queueReply("Oops! Try again! 🤖");
+      talkBtn.textContent = '🎤';
+      talkLabel.textContent = 'Allow mic access!';
+      bubble.textContent = "I need microphone access to hear you! 🎤";
+      conversationActive = false;
     }
   };
 
   recognition.onend = () => {
-    if (!gotResult && listening) {
-      stopListening();
-      queueReply("I didn't hear anything! Tap and try again! 🤖");
+    if (listening && !gotFinal && conversationActive) {
+      // Silently restart if nothing was said
+      listening = false;
+      setTimeout(() => startListening(), 300);
     }
   };
 
   try {
     recognition.start();
   } catch(e) {
-    console.log('Recognition start error:', e);
-    stopListening();
-    bubble.textContent = "Tap again to talk to me! 🎤";
+    listening = false;
+    setTimeout(() => startListening(), 500);
   }
 }
 
-function stopListening() {
+function stopConversation() {
+  conversationActive = false;
   listening = false;
+  if (recognition) try { recognition.stop(); } catch(e) {}
   talkBtn.classList.remove('listening');
   talkBtn.textContent = '🎤';
-  talkLabel.textContent = 'Tap to talk!';
+  talkLabel.textContent = 'Tap to start!';
+  bubble.textContent = "Tap the button to wake me up! 🤖";
 }
 
-function robotReact(color) {
-  robotSpeak(colorResponses[color]);
-
-  // Flash the robot's eye color
-  const eyes = document.querySelectorAll('.pupil');
-  const colors = { red: '#ff4444', blue: '#3498db', green: '#2ecc71', yellow: '#f1c40f', purple: '#9b59b6' };
-  eyes.forEach(e => {
-    e.style.background = colors[color];
-    e.style.boxShadow = `0 0 12px ${colors[color]}`;
-  });
-  setTimeout(() => {
-    eyes.forEach(e => {
-      e.style.background = '#00c8ff';
-      e.style.boxShadow = '0 0 8px #00c8ff';
-    });
-  }, 3000);
-}
-
-// iOS speechSynthesis workarounds
-let audioUnlocked = false;
-let audioCtx = null;
-
-// iOS bug: speechSynthesis pauses itself after ~15s. This keeps it alive.
-setInterval(() => {
-  if (synth && synth.paused) synth.resume();
-}, 5000);
-
-// Reclaim audio session after mic use — plays a tiny silent buffer
-function reclaimAudio() {
-  return new Promise(resolve => {
-    try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const buf = audioCtx.createBuffer(1, 1, 22050);
-      const src = audioCtx.createBufferSource();
-      src.buffer = buf;
-      src.connect(audioCtx.destination);
-      src.onended = resolve;
-      src.start(0);
-    } catch(e) {
-      resolve();
-    }
-  });
-}
-
-function unlockAudio() {
-  if (audioUnlocked) return;
-  audioUnlocked = true;
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-}
-
-function queueReply(text) {
-  // Show the reply text and change button to play mode
-  pendingReply = text;
-  bubble.textContent = text;
-  mouth.classList.add('happy');
-  talkBtn.textContent = '🔊';
-  talkBtn.classList.remove('listening');
-  talkBtn.style.background = 'linear-gradient(145deg, #9b59b6, #8e44ad)';
-  talkLabel.textContent = "Tap to hear Robo! 🔊";
-}
-
-function playReply() {
-  const text = pendingReply;
-  pendingReply = null;
-  talkBtn.textContent = '🎤';
-  talkBtn.style.background = '';
-  talkLabel.textContent = 'Tap to talk!';
-  mouth.classList.remove('happy');
-  robotSpeak(text);
-}
-
-function onTalkTap(e) {
+// === BUTTON HANDLERS ===
+let lastTap = 0;
+function onTap(e) {
   e.preventDefault();
-  e.stopPropagation();
-  unlockAudio();
-
-  if (pendingReply) {
-    // There's a queued reply — play it (this is a fresh user gesture, iOS allows it)
-    playReply();
-  } else if (!listening && !speaking) {
-    startListening();
+  if (conversationActive) {
+    stopConversation();
+  } else {
+    startConversation();
   }
 }
+talkBtn.addEventListener('touchend', (e) => { lastTap = Date.now(); onTap(e); }, { passive: false });
+talkBtn.addEventListener('click', (e) => { if (Date.now() - lastTap < 500) return; onTap(e); });
 
-// Use both touch and click but prevent double-fire
-let lastTap = 0;
-talkBtn.addEventListener('touchend', function(e) {
-  lastTap = Date.now();
-  onTalkTap(e);
-}, { passive: false });
-talkBtn.addEventListener('click', function(e) {
-  if (Date.now() - lastTap < 500) return; // Skip if touch just fired
-  onTalkTap(e);
-});
-
-// Color buttons — touch + click with iOS unlock
+// Color buttons
 document.querySelectorAll('.color-btn').forEach(btn => {
-  let lastColorTap = 0;
-  btn.addEventListener('touchend', function(e) {
+  let lt = 0;
+  const handler = (e) => {
     e.preventDefault();
-    lastColorTap = Date.now();
-    unlockAudio();
-    robotReact(this.dataset.color);
-  }, { passive: false });
-  btn.addEventListener('click', function(e) {
-    if (Date.now() - lastColorTap < 500) return;
-    unlockAudio();
-    robotReact(this.dataset.color);
-  });
+    if (!audioEl) { audioEl = new Audio(); audioEl.setAttribute('playsinline', ''); }
+    audioEl.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    audioEl.play().catch(() => {});
+
+    const color = btn.dataset.color;
+    // Pause conversation temporarily
+    const wasActive = conversationActive;
+    if (recognition) try { recognition.stop(); } catch(e) {}
+    listening = false;
+
+    const eyes = document.querySelectorAll('.pupil');
+    const colors = { red: '#ff4444', blue: '#3498db', green: '#2ecc71', yellow: '#f1c40f', purple: '#9b59b6' };
+    eyes.forEach(el => { el.style.background = colors[color]; el.style.boxShadow = `0 0 12px ${colors[color]}`; });
+    setTimeout(() => eyes.forEach(el => { el.style.background = '#00c8ff'; el.style.boxShadow = '0 0 8px #00c8ff'; }), 3000);
+
+    robotSpeak(colorResponses[color]).then(() => {
+      if (wasActive) setTimeout(() => startListening(), 300);
+    });
+  };
+  btn.addEventListener('touchend', (e) => { lt = Date.now(); handler(e); }, { passive: false });
+  btn.addEventListener('click', (e) => { if (Date.now() - lt < 500) return; handler(e); });
 });
 
-// Load voices early
-if (synth) {
-  synth.getVoices();
-  synth.onvoiceschanged = () => synth.getVoices();
-}
-
-// Don't auto-speak on load (iOS blocks it). Show text only.
-bubble.textContent = "Hi! I'm Robo! 🤖 Tap the big button to talk to me!";
-
-// Eye tracking (fun!)
-document.addEventListener('mousemove', (e) => {
-  const pl = document.getElementById('pupilL');
-  const pr = document.getElementById('pupilR');
-  const rect = pl.parentElement.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-  const dx = (e.clientX - cx) / window.innerWidth * 8;
-  const dy = (e.clientY - cy) / window.innerHeight * 8;
-  pl.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-  pr.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-});
-
+// Eye tracking
 document.addEventListener('touchmove', (e) => {
   const t = e.touches[0];
-  const pl = document.getElementById('pupilL');
-  const pr = document.getElementById('pupilR');
   const dx = (t.clientX / window.innerWidth - 0.5) * 8;
   const dy = (t.clientY / window.innerHeight - 0.5) * 8;
-  pl.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-  pr.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  document.getElementById('pupilL').style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  document.getElementById('pupilR').style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 });
+
+// Load voices for fallback
+if (window.speechSynthesis) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
 </script>
 </body>
 </html>
