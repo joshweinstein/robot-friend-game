@@ -104,8 +104,8 @@ const State = { IDLE: 'idle', LISTENING: 'listening', PROCESSING: 'processing', 
 let state = State.IDLE;
 let recognition = null;
 let audioEl = null;
-let lastResponse = '';
-let recognitionId = 0; // unique id per recognition session to ignore stale callbacks
+let usedResponses = new Set(); // track ALL used responses to never repeat
+let recognitionId = 0;
 
 function setState(newState) {
   console.log(`State: ${state} → ${newState}`);
@@ -259,21 +259,24 @@ const colorResponses = {
   purple: "Purple! Like a magical unicorn! So pretty!",
 };
 
+function pickUnused(arr) {
+  let options = arr.filter(r => !usedResponses.has(r));
+  if (options.length === 0) {
+    // All used — clear history for this set and pick fresh
+    arr.forEach(r => usedResponses.delete(r));
+    options = arr;
+  }
+  const pick = options[Math.floor(Math.random() * options.length)];
+  usedResponses.add(pick);
+  return pick;
+}
+
 function findResponse(text) {
   const t = text.toLowerCase();
   for (const [key, replies] of Object.entries(responses)) {
-    if (t.includes(key)) {
-      // Pick one that isn't the same as last time
-      const options = replies.filter(r => r !== lastResponse);
-      const pick = (options.length > 0 ? options : replies)[Math.floor(Math.random() * (options.length || replies.length))];
-      lastResponse = pick;
-      return pick;
-    }
+    if (t.includes(key)) return pickUnused(replies);
   }
-  const options = fallbacks.filter(r => r !== lastResponse);
-  const pick = (options.length > 0 ? options : fallbacks)[Math.floor(Math.random() * (options.length || fallbacks.length))];
-  lastResponse = pick;
-  return pick;
+  return pickUnused(fallbacks);
 }
 
 // ============================================================
