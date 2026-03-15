@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🤖 Robot Friend!</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+/* Stars background */
+.stars {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+}
+
+/* Robot */
+.robot-wrap {
+  position: relative;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.robot {
+  width: 200px;
+  height: 260px;
+  position: relative;
+}
+
+/* Robot Head */
+.head {
+  width: 140px;
+  height: 110px;
+  background: linear-gradient(145deg, #e0e0e0, #b0b0b0);
+  border-radius: 30px 30px 20px 20px;
+  margin: 0 auto;
+  position: relative;
+  border: 3px solid #888;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+}
+
+.antenna {
+  width: 6px;
+  height: 30px;
+  background: #888;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.antenna::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: #ff4444;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: glow 1.5s infinite alternate;
+}
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #ff4444; background: #ff4444; }
+  100% { box-shadow: 0 0 20px #ff6666, 0 0 40px #ff4444; background: #ff6666; }
+}
+
+/* Eyes */
+.eyes {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 20px;
+}
+.eye {
+  width: 36px;
+  height: 36px;
+  background: #111;
+  border-radius: 50%;
+  position: relative;
+  border: 3px solid #00c8ff;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5), inset 0 0 10px rgba(0, 200, 255, 0.2);
+}
+.eye .pupil {
+  width: 14px;
+  height: 14px;
+  background: #00c8ff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+  box-shadow: 0 0 8px #00c8ff;
+}
+
+/* Mouth */
+.mouth {
+  width: 50px;
+  height: 20px;
+  margin: 12px auto 0;
+  border-radius: 0 0 25px 25px;
+  background: #111;
+  border: 3px solid #00c8ff;
+  border-top: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
+}
+.mouth.talking {
+  animation: talk 0.3s infinite alternate;
+  height: 28px;
+  border-radius: 10px;
+}
+@keyframes talk {
+  0% { height: 14px; }
+  100% { height: 28px; }
+}
+.mouth.happy {
+  height: 12px;
+  width: 60px;
+  border-radius: 0 0 30px 30px;
+  background: #00c8ff;
+}
+
+/* Body */
+.body {
+  width: 120px;
+  height: 90px;
+  background: linear-gradient(145deg, #d0d0d0, #a0a0a0);
+  border-radius: 15px;
+  margin: 8px auto 0;
+  position: relative;
+  border: 3px solid #888;
+}
+.body .heart {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ff4466;
+  border-radius: 50%;
+  animation: heartbeat 1s infinite;
+  box-shadow: 0 0 15px rgba(255, 68, 102, 0.5);
+}
+@keyframes heartbeat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* Arms */
+.arm {
+  width: 20px;
+  height: 70px;
+  background: linear-gradient(145deg, #ccc, #999);
+  border-radius: 10px;
+  position: absolute;
+  top: 130px;
+  border: 2px solid #888;
+}
+.arm.left { left: 10px; transform: rotate(15deg); transform-origin: top center; }
+.arm.right { right: 10px; transform: rotate(-15deg); transform-origin: top center; }
+.arm.wave {
+  animation: wave 0.6s ease-in-out 4;
+}
+@keyframes wave {
+  0%, 100% { transform: rotate(-15deg); }
+  50% { transform: rotate(-45deg); }
+}
+
+/* Speech Bubble */
+.speech-bubble {
+  background: white;
+  color: #333;
+  padding: 16px 20px;
+  border-radius: 20px;
+  font-size: 22px;
+  margin: 20px auto;
+  max-width: 340px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  position: relative;
+  line-height: 1.4;
+  transition: all 0.3s;
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid white;
+}
+
+/* Talk Button */
+.talk-btn {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 6px 30px rgba(238, 90, 36, 0.5);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.talk-btn:active {
+  transform: scale(0.92);
+}
+.talk-btn.listening {
+  background: linear-gradient(145deg, #2ecc71, #27ae60);
+  box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5);
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5); }
+  50% { transform: scale(1.08); box-shadow: 0 6px 40px rgba(46, 204, 113, 0.7); }
+}
+
+.talk-label {
+  color: white;
+  font-size: 20px;
+  margin-top: 10px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Color buttons */
+.color-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.color-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid white;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s;
+}
+.color-btn:active { transform: scale(0.85); }
+
+.no-speech {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+  <div class="robot-wrap" id="robotWrap">
+    <div class="robot">
+      <div class="arm left" id="armLeft"></div>
+      <div class="arm right" id="armRight"></div>
+      <div class="head">
+        <div class="antenna"></div>
+        <div class="eyes">
+          <div class="eye"><div class="pupil" id="pupilL"></div></div>
+          <div class="eye"><div class="pupil" id="pupilR"></div></div>
+        </div>
+        <div class="mouth" id="mouth"></div>
+      </div>
+      <div class="body">
+        <div class="heart"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="speech-bubble" id="bubble">Hi! I'm Robo! 🤖 Press the button to talk to me!</div>
+
+  <button class="talk-btn" id="talkBtn" onclick="startListening()">🎤</button>
+  <div class="talk-label" id="talkLabel">Tap to talk!</div>
+
+  <div class="color-btns">
+    <button class="color-btn" style="background:#ff6b6b" onclick="robotReact('red')">❤️</button>
+    <button class="color-btn" style="background:#3498db" onclick="robotReact('blue')">💙</button>
+    <button class="color-btn" style="background:#2ecc71" onclick="robotReact('green')">💚</button>
+    <button class="color-btn" style="background:#f1c40f" onclick="robotReact('yellow')">⭐</button>
+    <button class="color-btn" style="background:#9b59b6" onclick="robotReact('purple')">💜</button>
+  </div>
+
+  <div class="no-speech" id="noSpeech" style="display:none">
+    Voice not available — tap the color buttons to play! 🎨
+  </div>
+</div>
+
+<script>
+// Stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 3 + 1;
+  s.style.width = size + 'px';
+  s.style.height = size + 'px';
+  s.style.left = Math.random() * 100 + '%';
+  s.style.top = Math.random() * 100 + '%';
+  s.style.animationDelay = Math.random() * 2 + 's';
+  s.style.animationDuration = (Math.random() * 2 + 1) + 's';
+  starsEl.appendChild(s);
+}
+
+const bubble = document.getElementById('bubble');
+const mouth = document.getElementById('mouth');
+const talkBtn = document.getElementById('talkBtn');
+const talkLabel = document.getElementById('talkLabel');
+const armRight = document.getElementById('armRight');
+
+let recognition = null;
+let synth = window.speechSynthesis;
+let listening = false;
+let speaking = false;
+
+// Check speech support
+const hasSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+if (!hasSpeechRecognition) {
+  document.getElementById('noSpeech').style.display = 'block';
+}
+
+// Responses for a 3-year-old
+const greetings = [
+  "Hi friend! I'm so happy to see you! 😊",
+  "Hello! You're my favorite person! 🌟",
+  "Yay! Hi hi hi! 👋",
+  "Beep boop! Hello there! 🤖",
+];
+
+const responses = {
+  hello: ["Hi! I like you! 💕", "Hello hello hello! 🎉", "Hiii! Beep boop! 🤖"],
+  hi: ["Hiii! You're awesome! ⭐", "Hi friend! Want to play? 🎈", "Hi hi hi! 😊"],
+  name: ["I'm Robo! What's YOUR name? 🤖", "My name is Robo! Beep boop! 🌟"],
+  robot: ["Yes! I'm a robot! Beep boop beep! 🤖", "That's me! I'm a friendly robot! 💙"],
+  love: ["I love you too! So much! 💕", "Awww! You make my heart go beep beep! ❤️", "Love love love! 💗"],
+  yes: ["Yaaay! 🎉", "Woo hoo! That's great! ⭐", "Yes yes yes! 😊"],
+  no: ["That's okay! 💙", "No problem, friend! 🌈", "Okay okay! Beep boop! 🤖"],
+  color: ["I love ALL the colors! 🌈", "My favorite color is blue! Like my eyes! 💙", "Colors are so pretty! ✨"],
+  animal: ["I love puppies! Woof woof! 🐶", "Animals are amazing! What's your favorite? 🐱", "Beep boop! I wish I had a pet! 🐰"],
+  dog: ["Woof woof! Dogs are the BEST! 🐶", "I love doggies so much! 🐕"],
+  cat: ["Meow meow! Kitties are so cute! 🐱", "I love cats! They go purrrr! 😺"],
+  mom: ["Your mommy is wonderful! 💕", "Mommies are the best! 🥰"],
+  dad: ["Your daddy is awesome! 💪", "Daddies are so cool! 😎"],
+  baby: ["Babies are so cute! 👶", "Goo goo ga ga! Beep boop! 😊"],
+  play: ["Yay! Let's play! 🎈", "I love playing! What should we play? 🎮"],
+  dance: ["Let's dance! 💃🕺 Beep boop beep!", "Dancing is so fun! Wiggle wiggle! 🎵"],
+  sing: ["La la la! Beep boop la la! 🎵", "I love singing! 🎶 Do re mi!"],
+  funny: ["Ha ha ha! You're so funny! 😂", "Hee hee! That makes me giggle! 🤣"],
+  poop: ["Hahaha! Silly! 💩😂", "Poop! Hee hee hee! That's funny! 💩"],
+  fart: ["Pffttt! 😂 Beep BOOP! Hahaha!", "Toot toot! Hee hee! 💨😂"],
+  food: ["Yummy! I eat batteries! ⚡😋", "I love pretend pizza! 🍕"],
+  pizza: ["Pizza is SO yummy! 🍕", "I wish I could eat pizza! 🍕😋"],
+  ice: ["Ice cream! My favorite pretend food! 🍦", "Yummy yummy ice cream! 🍨"],
+  star: ["Stars are so sparkly! ⭐✨", "Twinkle twinkle little star! 🌟"],
+  moon: ["The moon is so pretty! 🌙", "To the moon and back! 🚀🌙"],
+  happy: ["I'm SO happy! Are you happy too? 😊", "Yay! Happy happy happy! 🎉"],
+  sad: ["Aww, don't be sad! I'm here! 💙🤗", "Here's a big robot hug! 🤖💕"],
+  scared: ["Don't worry! I'll protect you! 💪🤖", "It's okay! Robo is here! 🤗"],
+  thank: ["You're welcome, friend! 💕", "Aw, so polite! You're amazing! 🌟"],
+  bye: ["Bye bye! Come back soon! 👋💙", "See you later alligator! 🐊💕"],
+  old: ["I'm brand new! Just made today! 🤖✨", "I'm a baby robot! Beep! 👶🤖"],
+};
+
+const fallbacks = [
+  "Wow! That's so cool! Tell me more! 😊",
+  "Beep boop! I like when you talk to me! 🤖",
+  "Ooh! That's interesting! 🌟",
+  "Hee hee! You're funny! 😄",
+  "Really?! That's amazing! ✨",
+  "Wow wow wow! 🎉",
+  "Cool! Beep boop beep! 🤖",
+  "I love talking to you! 💕",
+  "Tell me something else! I'm listening! 👂",
+  "Whoa! You're so smart! 🧠⭐",
+];
+
+const colorResponses = {
+  red: "Red! Like a fire truck! 🚒 Wee-ooo wee-ooo!",
+  blue: "Blue! Like the sky! ☁️ I love blue!",
+  green: "Green! Like a froggy! 🐸 Ribbit ribbit!",
+  yellow: "Yellow! Like the sun! ☀️ So bright and happy!",
+  purple: "Purple! Like a magical unicorn! 🦄 So pretty!",
+};
+
+function findResponse(text) {
+  text = text.toLowerCase();
+  for (const [key, replies] of Object.entries(responses)) {
+    if (text.includes(key)) {
+      return replies[Math.floor(Math.random() * replies.length)];
+    }
+  }
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
+
+function robotSpeak(text) {
+  if (speaking) return;
+  speaking = true;
+  bubble.textContent = text;
+  mouth.classList.add('talking');
+
+  // Wave arm
+  armRight.classList.remove('wave');
+  void armRight.offsetWidth;
+  armRight.classList.add('wave');
+
+  if (synth) {
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text.replace(/[^\w\s!?.,']/g, ''));
+    utter.rate = 0.85;
+    utter.pitch = 1.6;
+    utter.volume = 1;
+
+    // Try to find a good voice
+    const voices = synth.getVoices();
+    const goodVoice = voices.find(v => v.name.includes('Samantha')) ||
+                      voices.find(v => v.name.includes('Karen')) ||
+                      voices.find(v => v.name.includes('Zarvox')) ||
+                      voices.find(v => v.lang.startsWith('en') && v.name.includes('Female')) ||
+                      voices.find(v => v.lang.startsWith('en'));
+    if (goodVoice) utter.voice = goodVoice;
+
+    utter.onend = () => {
+      mouth.classList.remove('talking');
+      mouth.classList.add('happy');
+      speaking = false;
+      setTimeout(() => mouth.classList.remove('happy'), 2000);
+    };
+    utter.onerror = () => {
+      mouth.classList.remove('talking');
+      speaking = false;
+    };
+    synth.speak(utter);
+  } else {
+    setTimeout(() => {
+      mouth.classList.remove('talking');
+      speaking = false;
+    }, 2000);
+  }
+}
+
+function startListening() {
+  if (listening || speaking) return;
+  if (!hasSpeechRecognition) {
+    robotSpeak(fallbacks[Math.floor(Math.random() * fallbacks.length)]);
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  talkBtn.classList.add('listening');
+  talkBtn.textContent = '👂';
+  talkLabel.textContent = "I'm listening...";
+  listening = true;
+  bubble.textContent = "I'm listening! 👂";
+
+  recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    console.log('Heard:', text);
+    bubble.textContent = '🗣️ "' + text + '"';
+    setTimeout(() => {
+      const response = findResponse(text);
+      robotSpeak(response);
+    }, 600);
+  };
+
+  recognition.onerror = (event) => {
+    console.log('Speech error:', event.error);
+    if (event.error === 'no-speech') {
+      robotSpeak("I didn't hear anything! Try again! 🤖");
+    } else {
+      robotSpeak("Oops! Let's try again! 🤖");
+    }
+    stopListening();
+  };
+
+  recognition.onend = () => {
+    stopListening();
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  listening = false;
+  talkBtn.classList.remove('listening');
+  talkBtn.textContent = '🎤';
+  talkLabel.textContent = 'Tap to talk!';
+}
+
+function robotReact(color) {
+  robotSpeak(colorResponses[color]);
+
+  // Flash the robot's eye color
+  const eyes = document.querySelectorAll('.pupil');
+  const colors = { red: '#ff4444', blue: '#3498db', green: '#2ecc71', yellow: '#f1c40f', purple: '#9b59b6' };
+  eyes.forEach(e => {
+    e.style.background = colors[color];
+    e.style.boxShadow = `0 0 12px ${colors[color]}`;
+  });
+  setTimeout(() => {
+    eyes.forEach(e => {
+      e.style.background = '#00c8ff';
+      e.style.boxShadow = '0 0 8px #00c8ff';
+    });
+  }, 3000);
+}
+
+// Load voices
+if (synth) {
+  synth.getVoices();
+  synth.onvoiceschanged = () => synth.getVoices();
+}
+
+// Initial greeting after short delay
+setTimeout(() => {
+  robotSpeak(greetings[Math.floor(Math.random() * greetings.length)]);
+}, 1000);
+
+// Eye tracking (fun!)
+document.addEventListener('mousemove', (e) => {
+  const pl = document.getElementById('pupilL');
+  const pr = document.getElementById('pupilR');
+  const rect = pl.parentElement.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = (e.clientX - cx) / window.innerWidth * 8;
+  const dy = (e.clientY - cy) / window.innerHeight * 8;
+  pl.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  pr.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+});
+
+document.addEventListener('touchmove', (e) => {
+  const t = e.touches[0];
+  const pl = document.getElementById('pupilL');
+  const pr = document.getElementById('pupilR');
+  const dx = (t.clientX / window.innerWidth - 0.5) * 8;
+  const dy = (t.clientY / window.innerHeight - 0.5) * 8;
+  pl.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  pr.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+});
+</script>
+</body>
+</html>
