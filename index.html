@@ -328,7 +328,7 @@ body {
 
   <div class="speech-bubble" id="bubble">Hi! I'm Robo! 🤖 Press the button to talk to me!</div>
 
-  <button class="talk-btn" id="talkBtn" onclick="startListening()">🎤</button>
+  <button class="talk-btn" id="talkBtn">🎤</button>
   <div class="talk-label" id="talkLabel">Tap to talk!</div>
 
   <div class="color-btns">
@@ -497,7 +497,17 @@ function robotSpeak(text) {
 }
 
 function startListening() {
-  if (listening || speaking) return;
+  // Cancel any ongoing speech so button always works
+  if (synth) synth.cancel();
+  speaking = false;
+  mouth.classList.remove('talking');
+
+  if (listening) {
+    if (recognition) recognition.stop();
+    stopListening();
+    return;
+  }
+
   if (!hasSpeechRecognition) {
     robotSpeak(fallbacks[Math.floor(Math.random() * fallbacks.length)]);
     return;
@@ -506,40 +516,59 @@ function startListening() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
-  recognition.interimResults = false;
+  recognition.interimResults = true;
+  recognition.continuous = false;
   recognition.maxAlternatives = 3;
 
+  listening = true;
   talkBtn.classList.add('listening');
   talkBtn.textContent = '👂';
   talkLabel.textContent = "I'm listening...";
-  listening = true;
   bubble.textContent = "I'm listening! 👂";
 
+  let gotResult = false;
+
   recognition.onresult = (event) => {
-    const text = event.results[0][0].transcript;
-    console.log('Heard:', text);
+    const result = event.results[event.results.length - 1];
+    const text = result[0].transcript;
     bubble.textContent = '🗣️ "' + text + '"';
-    setTimeout(() => {
-      const response = findResponse(text);
-      robotSpeak(response);
-    }, 600);
+    if (result.isFinal && !gotResult) {
+      gotResult = true;
+      console.log('Heard:', text);
+      stopListening();
+      setTimeout(() => {
+        const response = findResponse(text);
+        robotSpeak(response);
+      }, 500);
+    }
   };
 
   recognition.onerror = (event) => {
     console.log('Speech error:', event.error);
+    stopListening();
     if (event.error === 'no-speech') {
       robotSpeak("I didn't hear anything! Try again! 🤖");
+    } else if (event.error === 'not-allowed') {
+      bubble.textContent = "Please allow microphone access! 🎤";
     } else {
-      robotSpeak("Oops! Let's try again! 🤖");
+      robotSpeak("Oops! Try again! 🤖");
     }
-    stopListening();
   };
 
   recognition.onend = () => {
-    stopListening();
+    if (!gotResult && listening) {
+      stopListening();
+      robotSpeak("I didn't hear anything! Tap and try again! 🤖");
+    }
   };
 
-  recognition.start();
+  try {
+    recognition.start();
+  } catch(e) {
+    console.log('Recognition start error:', e);
+    stopListening();
+    bubble.textContent = "Tap again to talk to me! 🎤";
+  }
 }
 
 function stopListening() {
@@ -566,6 +595,16 @@ function robotReact(color) {
     });
   }, 3000);
 }
+
+// Button handler — must be direct user gesture for iOS mic permission
+talkBtn.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  startListening();
+}, { passive: false });
+talkBtn.addEventListener('click', function(e) {
+  // Fallback for desktop / non-touch
+  if (!('ontouchend' in window)) startListening();
+});
 
 // Load voices
 if (synth) {
