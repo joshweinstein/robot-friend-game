@@ -9,125 +9,47 @@
 body {
   font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  touch-action: manipulation;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden; touch-action: manipulation;
 }
 .stars { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
 .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite alternate; }
 @keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 1; } }
-
 .container { position: relative; z-index: 1; text-align: center; width: 100%; max-width: 500px; padding: 20px; }
-
 .robot-wrap { display: inline-block; animation: float 3s ease-in-out infinite; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
 .robot { width: 200px; height: 260px; position: relative; }
-.head {
-  width: 140px; height: 110px;
-  background: linear-gradient(145deg, #e0e0e0, #b0b0b0);
-  border-radius: 30px 30px 20px 20px;
-  margin: 0 auto; position: relative;
-  border: 3px solid #888;
-  box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
-}
+.head { width: 140px; height: 110px; background: linear-gradient(145deg, #e0e0e0, #b0b0b0); border-radius: 30px 30px 20px 20px; margin: 0 auto; position: relative; border: 3px solid #888; box-shadow: 0 0 20px rgba(0, 200, 255, 0.3); }
 .antenna { width: 6px; height: 30px; background: #888; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); }
-.antenna::after {
-  content: ''; width: 16px; height: 16px; background: #ff4444; border-radius: 50%;
-  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-  animation: glow 1.5s infinite alternate;
-}
+.antenna::after { content: ''; width: 16px; height: 16px; background: #ff4444; border-radius: 50%; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); animation: glow 1.5s infinite alternate; }
 @keyframes glow { 0% { box-shadow: 0 0 5px #ff4444; } 100% { box-shadow: 0 0 20px #ff6666, 0 0 40px #ff4444; } }
-
 .eyes { display: flex; justify-content: center; gap: 24px; padding-top: 20px; }
-.eye {
-  width: 36px; height: 36px; background: #111; border-radius: 50%;
-  position: relative; border: 3px solid #00c8ff;
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
-}
-.pupil {
-  width: 14px; height: 14px; background: #00c8ff; border-radius: 50%;
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  transition: all 0.3s; box-shadow: 0 0 8px #00c8ff;
-}
-
-.mouth {
-  width: 50px; height: 20px; margin: 12px auto 0;
-  border-radius: 0 0 25px 25px; background: #111;
-  border: 3px solid #00c8ff; border-top: none;
-  transition: all 0.3s; box-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
-}
+.eye { width: 36px; height: 36px; background: #111; border-radius: 50%; position: relative; border: 3px solid #00c8ff; box-shadow: 0 0 10px rgba(0, 200, 255, 0.5); }
+.pupil { width: 14px; height: 14px; background: #00c8ff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.3s; box-shadow: 0 0 8px #00c8ff; }
+.mouth { width: 50px; height: 20px; margin: 12px auto 0; border-radius: 0 0 25px 25px; background: #111; border: 3px solid #00c8ff; border-top: none; transition: all 0.3s; box-shadow: 0 0 8px rgba(0, 200, 255, 0.3); }
 .mouth.talking { animation: talk 0.15s infinite alternate; border-radius: 10px; }
 @keyframes talk { 0% { height: 10px; } 100% { height: 28px; } }
 .mouth.happy { height: 12px; width: 60px; border-radius: 0 0 30px 30px; background: #00c8ff; }
-
-.body {
-  width: 120px; height: 90px;
-  background: linear-gradient(145deg, #d0d0d0, #a0a0a0);
-  border-radius: 15px; margin: 8px auto 0;
-  position: relative; border: 3px solid #888;
-}
-.heart {
-  width: 30px; height: 30px; position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%); background: #ff4466; border-radius: 50%;
-  animation: heartbeat 1s infinite; box-shadow: 0 0 15px rgba(255, 68, 102, 0.5);
-}
+.body { width: 120px; height: 90px; background: linear-gradient(145deg, #d0d0d0, #a0a0a0); border-radius: 15px; margin: 8px auto 0; position: relative; border: 3px solid #888; }
+.heart { width: 30px; height: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff4466; border-radius: 50%; animation: heartbeat 1s infinite; box-shadow: 0 0 15px rgba(255, 68, 102, 0.5); }
 @keyframes heartbeat { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.15); } }
-
-.arm {
-  width: 20px; height: 70px;
-  background: linear-gradient(145deg, #ccc, #999);
-  border-radius: 10px; position: absolute; top: 130px; border: 2px solid #888;
-}
+.arm { width: 20px; height: 70px; background: linear-gradient(145deg, #ccc, #999); border-radius: 10px; position: absolute; top: 130px; border: 2px solid #888; }
 .arm.left { left: 10px; transform: rotate(15deg); }
 .arm.right { right: 10px; transform: rotate(-15deg); }
 .arm.wave { animation: wave 0.6s ease-in-out 4; }
 @keyframes wave { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(-45deg); } }
-
-.speech-bubble {
-  background: white; color: #333; padding: 16px 20px; border-radius: 20px;
-  font-size: 22px; margin: 20px auto; max-width: 340px; min-height: 60px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3); line-height: 1.4;
-}
-.speech-bubble::after {
-  content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-  border-left: 15px solid transparent; border-right: 15px solid transparent;
-  border-bottom: 15px solid white;
-}
-
-.talk-btn {
-  width: 120px; height: 120px; border-radius: 50%; border: none;
-  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
-  color: white; font-size: 40px; cursor: pointer; margin-top: 20px;
-  box-shadow: 0 6px 30px rgba(238, 90, 36, 0.5);
-  -webkit-tap-highlight-color: transparent;
-}
-.talk-btn.listening {
-  background: linear-gradient(145deg, #2ecc71, #27ae60);
-  box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5);
-  animation: pulse 1s infinite;
-}
+.speech-bubble { background: white; color: #333; padding: 16px 20px; border-radius: 20px; font-size: 22px; margin: 20px auto; max-width: 340px; min-height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); line-height: 1.4; position: relative; }
+.speech-bubble::after { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 15px solid white; }
+.talk-btn { width: 120px; height: 120px; border-radius: 50%; border: none; background: linear-gradient(145deg, #ff6b6b, #ee5a24); color: white; font-size: 40px; cursor: pointer; margin-top: 20px; box-shadow: 0 6px 30px rgba(238, 90, 36, 0.5); -webkit-tap-highlight-color: transparent; }
+.talk-btn.listening { background: linear-gradient(145deg, #2ecc71, #27ae60); box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5); animation: pulse 1s infinite; }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-
 .talk-label { color: white; font-size: 20px; margin-top: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-
 .color-btns { display: flex; gap: 12px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
-.color-btn {
-  width: 50px; height: 50px; border-radius: 50%; border: 3px solid white;
-  cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.status { color: #666; font-size: 12px; margin-top: 12px; }
+.color-btn { width: 50px; height: 50px; border-radius: 50%; border: 3px solid white; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
 </style>
 </head>
 <body>
-
 <div class="stars" id="stars"></div>
 <div class="container">
   <div class="robot-wrap">
@@ -145,11 +67,9 @@ body {
       <div class="body"><div class="heart"></div></div>
     </div>
   </div>
-
   <div class="speech-bubble" id="bubble">Tap the button to wake me up! 🤖</div>
   <button class="talk-btn" id="talkBtn">🎤</button>
   <div class="talk-label" id="talkLabel">Tap to start!</div>
-
   <div class="color-btns">
     <button class="color-btn" data-color="red" style="background:#ff6b6b">❤️</button>
     <button class="color-btn" data-color="blue" style="background:#3498db">💙</button>
@@ -157,125 +77,141 @@ body {
     <button class="color-btn" data-color="yellow" style="background:#f1c40f">⭐</button>
     <button class="color-btn" data-color="purple" style="background:#9b59b6">💜</button>
   </div>
-  <div class="status" id="status"></div>
 </div>
 
 <script>
-// === STARS ===
+// Stars
 const starsEl = document.getElementById('stars');
 for (let i = 0; i < 60; i++) {
   const s = document.createElement('div');
   s.className = 'star';
-  const size = Math.random() * 3 + 1;
-  Object.assign(s.style, {
-    width: size+'px', height: size+'px',
-    left: Math.random()*100+'%', top: Math.random()*100+'%',
-    animationDelay: Math.random()*2+'s', animationDuration: (Math.random()*2+1)+'s'
-  });
+  const sz = Math.random() * 3 + 1;
+  Object.assign(s.style, { width: sz+'px', height: sz+'px', left: Math.random()*100+'%', top: Math.random()*100+'%', animationDelay: Math.random()*2+'s', animationDuration: (Math.random()*2+1)+'s' });
   starsEl.appendChild(s);
 }
 
-// === ELEMENTS ===
+// Elements
 const bubble = document.getElementById('bubble');
 const mouth = document.getElementById('mouth');
 const talkBtn = document.getElementById('talkBtn');
 const talkLabel = document.getElementById('talkLabel');
 const armRight = document.getElementById('armRight');
-const status = document.getElementById('status');
 
-// === STATE ===
-let listening = false;
-let speaking = false;
-let conversationActive = false;
+// ============================================================
+// STATE MACHINE: idle → listening → processing → speaking → listening
+// ============================================================
+const State = { IDLE: 'idle', LISTENING: 'listening', PROCESSING: 'processing', SPEAKING: 'speaking' };
+let state = State.IDLE;
 let recognition = null;
-let audioEl = null; // reusable audio element, unlocked on first tap
+let audioEl = null;
+let lastResponse = '';
+let recognitionId = 0; // unique id per recognition session to ignore stale callbacks
 
-// === AUDIO ELEMENT TTS ===
-// Use Google Translate TTS via <audio> — works on iOS after mic use
-function speakViaAudio(text) {
+function setState(newState) {
+  console.log(`State: ${state} → ${newState}`);
+  state = newState;
+  switch (newState) {
+    case State.IDLE:
+      talkBtn.classList.remove('listening');
+      talkBtn.textContent = '🎤';
+      talkLabel.textContent = 'Tap to start!';
+      break;
+    case State.LISTENING:
+      talkBtn.classList.add('listening');
+      talkBtn.textContent = '👂';
+      talkLabel.textContent = 'Listening...';
+      break;
+    case State.PROCESSING:
+      talkBtn.classList.remove('listening');
+      talkBtn.textContent = '🤖';
+      talkLabel.textContent = 'Robo is thinking...';
+      break;
+    case State.SPEAKING:
+      talkBtn.classList.remove('listening');
+      talkBtn.textContent = '🔊';
+      talkLabel.textContent = '';
+      break;
+  }
+}
+
+// ============================================================
+// TTS — Google Translate audio element (works on iOS after mic)
+// ============================================================
+function speak(text) {
   return new Promise((resolve) => {
     const clean = text.replace(/[^\w\s!?.,']/g, '').trim().substring(0, 200);
     if (!clean) { resolve(); return; }
 
-    // Google TTS URL
     const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=' + encodeURIComponent(clean);
 
     if (!audioEl) {
       audioEl = new Audio();
       audioEl.setAttribute('playsinline', '');
     }
+
+    // Clean up any previous listeners
+    const onEnd = () => { cleanup(); resolve(); };
+    const onError = () => {
+      console.log('Google TTS failed, trying speechSynthesis');
+      cleanup();
+      speakFallback(clean).then(resolve);
+    };
+    const cleanup = () => {
+      audioEl.removeEventListener('ended', onEnd);
+      audioEl.removeEventListener('error', onError);
+    };
+
+    audioEl.addEventListener('ended', onEnd);
+    audioEl.addEventListener('error', onError);
     audioEl.src = url;
-
-    const done = () => {
-      audioEl.removeEventListener('ended', done);
-      audioEl.removeEventListener('error', fallbackDone);
-      resolve();
-    };
-    const fallbackDone = () => {
-      // If Google TTS fails, try speechSynthesis as fallback
-      console.log('Audio TTS failed, trying speechSynthesis');
-      audioEl.removeEventListener('ended', done);
-      audioEl.removeEventListener('error', fallbackDone);
-      speakViaSynth(text).then(resolve);
-    };
-
-    audioEl.addEventListener('ended', done);
-    audioEl.addEventListener('error', fallbackDone);
-
     audioEl.play().catch(() => {
-      console.log('Audio play failed, trying speechSynthesis');
-      speakViaSynth(text).then(resolve);
+      cleanup();
+      speakFallback(clean).then(resolve);
     });
   });
 }
 
-// Fallback: speechSynthesis
-function speakViaSynth(text) {
+function speakFallback(clean) {
   return new Promise((resolve) => {
     const synth = window.speechSynthesis;
     if (!synth) { resolve(); return; }
-    const clean = text.replace(/[^\w\s!?.,']/g, '').trim();
-    if (!clean) { resolve(); return; }
-
     synth.cancel();
-    const utter = new SpeechSynthesisUtterance(clean);
-    utter.rate = 0.85;
-    utter.pitch = 1.6;
+    const u = new SpeechSynthesisUtterance(clean);
+    u.rate = 0.85; u.pitch = 1.6;
     const voices = synth.getVoices();
-    const v = voices.find(v => v.name === 'Samantha') ||
-              voices.find(v => v.lang === 'en-US') ||
-              voices.find(v => v.lang.startsWith('en'));
-    if (v) utter.voice = v;
-
-    let ended = false;
-    const fin = () => { if (!ended) { ended = true; resolve(); } };
-    utter.onend = fin;
-    utter.onerror = fin;
+    const v = voices.find(v => v.name === 'Samantha') || voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en'));
+    if (v) u.voice = v;
+    let done = false;
+    const fin = () => { if (!done) { done = true; resolve(); } };
+    u.onend = fin; u.onerror = fin;
     setTimeout(fin, Math.max(3000, clean.split(' ').length * 600));
-    synth.speak(utter);
+    synth.speak(u);
     setTimeout(() => { if (synth.paused) synth.resume(); }, 100);
   });
 }
 
-// === ROBOT SPEAK (unified) ===
+// ============================================================
+// ROBOT SPEAK — only if in correct state
+// ============================================================
 async function robotSpeak(text) {
-  if (speaking) return;
-  speaking = true;
+  if (state === State.SPEAKING) return; // prevent double-speak
+  setState(State.SPEAKING);
   bubble.textContent = text;
   mouth.classList.add('talking');
   armRight.classList.remove('wave');
   void armRight.offsetWidth;
   armRight.classList.add('wave');
 
-  await speakViaAudio(text);
+  await speak(text);
 
   mouth.classList.remove('talking');
   mouth.classList.add('happy');
-  speaking = false;
   setTimeout(() => mouth.classList.remove('happy'), 1500);
 }
 
-// === RESPONSES ===
+// ============================================================
+// RESPONSES
+// ============================================================
 const responses = {
   hello: ["Hi! I like you!", "Hello hello hello!", "Hiii! Beep boop!"],
   hi: ["Hiii! You're awesome!", "Hi friend! Want to play?", "Hi hi hi!"],
@@ -308,7 +244,6 @@ const responses = {
   why: ["Because robots are curious too!", "Hmm, I'm not sure! What do you think?"],
   how: ["With beeps and boops!", "I'm doing great! How are you?"],
 };
-
 const fallbacks = [
   "Wow! That's so cool!", "Beep boop! I like when you talk to me!",
   "Ooh! That's interesting!", "Hee hee! You're funny!",
@@ -316,7 +251,6 @@ const fallbacks = [
   "Cool! Beep boop beep!", "I love talking to you!",
   "Tell me more!", "Whoa! You're so smart!",
 ];
-
 const colorResponses = {
   red: "Red! Like a fire truck! Wee ooo wee ooo!",
   blue: "Blue! Like the sky! I love blue!",
@@ -328,138 +262,152 @@ const colorResponses = {
 function findResponse(text) {
   const t = text.toLowerCase();
   for (const [key, replies] of Object.entries(responses)) {
-    if (t.includes(key)) return replies[Math.floor(Math.random() * replies.length)];
+    if (t.includes(key)) {
+      // Pick one that isn't the same as last time
+      const options = replies.filter(r => r !== lastResponse);
+      const pick = (options.length > 0 ? options : replies)[Math.floor(Math.random() * (options.length || replies.length))];
+      lastResponse = pick;
+      return pick;
+    }
   }
-  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  const options = fallbacks.filter(r => r !== lastResponse);
+  const pick = (options.length > 0 ? options : fallbacks)[Math.floor(Math.random() * (options.length || fallbacks.length))];
+  lastResponse = pick;
+  return pick;
 }
 
-// === SPEECH RECOGNITION ===
+// ============================================================
+// SPEECH RECOGNITION
+// ============================================================
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-function startConversation() {
-  if (conversationActive) return;
-  conversationActive = true;
-
-  // Unlock audio element on user gesture
-  if (!audioEl) {
-    audioEl = new Audio();
-    audioEl.setAttribute('playsinline', '');
+function killRecognition() {
+  recognitionId++;
+  if (recognition) {
+    try { recognition.onresult = null; recognition.onerror = null; recognition.onend = null; recognition.stop(); } catch(e) {}
+    recognition = null;
   }
-  // iOS requires a play() from user gesture to unlock audio element
-  audioEl.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
-  audioEl.play().catch(() => {});
-
-  // Also unlock speechSynthesis as fallback
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance('');
-    u.volume = 0;
-    window.speechSynthesis.speak(u);
-  }
-
-  robotSpeak("Hi friend! I'm Robo! Talk to me!").then(() => {
-    startListening();
-  });
 }
 
 function startListening() {
-  if (!SpeechRecognition || listening || speaking) {
-    if (!SpeechRecognition) bubble.textContent = "Tap the color buttons to play! 🎨";
-    if (speaking && conversationActive) {
-      // Retry after speaking finishes
-      setTimeout(() => startListening(), 500);
-    }
-    return;
-  }
+  if (!SpeechRecognition) { bubble.textContent = "Tap the color buttons to play! 🎨"; return; }
+  if (state !== State.IDLE && state !== State.LISTENING) return; // only start from idle
 
+  killRecognition(); // kill any stale instance
+
+  const myId = ++recognitionId;
   recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   recognition.interimResults = true;
   recognition.continuous = false;
 
-  listening = true;
-  talkBtn.classList.add('listening');
-  talkBtn.textContent = '👂';
-  talkLabel.textContent = "Listening...";
-  status.textContent = '';
+  setState(State.LISTENING);
 
   let gotFinal = false;
 
   recognition.onresult = (event) => {
+    if (myId !== recognitionId) return; // stale session, ignore
     const result = event.results[event.results.length - 1];
     const text = result[0].transcript;
+
     if (!result.isFinal) {
       bubble.textContent = '🗣️ ' + text + '...';
-    } else if (!gotFinal) {
-      gotFinal = true;
-      bubble.textContent = '🗣️ "' + text + '"';
-      listening = false;
-      talkBtn.classList.remove('listening');
-      talkBtn.textContent = '🤖';
-      talkLabel.textContent = 'Robo is thinking...';
-
-      const response = findResponse(text);
-      // Stop mic, let kid see what they said, then robot talks, then mic restarts
-      if (recognition) try { recognition.stop(); } catch(e) {}
-      setTimeout(async () => {
-        await robotSpeak(response);
-        if (conversationActive) {
-          setTimeout(() => startListening(), 400);
-        }
-      }, 600);
+      return;
     }
+    if (gotFinal) return; // already handled
+    gotFinal = true;
+
+    bubble.textContent = '🗣️ "' + text + '"';
+    const response = findResponse(text);
+
+    // Kill mic immediately
+    killRecognition();
+    setState(State.PROCESSING);
+
+    // Brief pause so kid sees their words, then robot responds
+    setTimeout(async () => {
+      await robotSpeak(response);
+      // After speaking, go back to listening
+      setState(State.IDLE);
+      setTimeout(() => startListening(), 500);
+    }, 700);
   };
 
   recognition.onerror = (event) => {
+    if (myId !== recognitionId) return;
     console.log('Mic error:', event.error);
-    listening = false;
-    talkBtn.classList.remove('listening');
-    if (event.error === 'no-speech' && conversationActive && !speaking) {
-      talkBtn.textContent = '🎤';
-      talkLabel.textContent = 'Say something!';
-      setTimeout(() => startListening(), 500);
-    } else if (event.error === 'not-allowed') {
-      talkBtn.textContent = '🎤';
-      talkLabel.textContent = 'Allow mic access!';
+
+    if (event.error === 'not-allowed') {
+      killRecognition();
+      setState(State.IDLE);
       bubble.textContent = "I need microphone access to hear you! 🎤";
-      conversationActive = false;
+      return;
     }
+
+    // For no-speech or other errors, just quietly retry
+    killRecognition();
+    setState(State.IDLE);
+    setTimeout(() => startListening(), 800);
   };
 
   recognition.onend = () => {
-    listening = false;
-    if (!gotFinal && conversationActive && !speaking) {
-      setTimeout(() => startListening(), 300);
-    }
+    if (myId !== recognitionId) return;
+    if (gotFinal) return; // already handling result
+    // Recognition ended without a result — just restart
+    setState(State.IDLE);
+    setTimeout(() => startListening(), 500);
   };
 
   try {
     recognition.start();
   } catch(e) {
-    listening = false;
-    setTimeout(() => startListening(), 500);
+    setState(State.IDLE);
+    setTimeout(() => startListening(), 800);
   }
+}
+
+// ============================================================
+// CONVERSATION START/STOP
+// ============================================================
+let conversationOn = false;
+
+async function startConversation() {
+  if (conversationOn) return;
+  conversationOn = true;
+
+  // Unlock audio on user gesture
+  if (!audioEl) { audioEl = new Audio(); audioEl.setAttribute('playsinline', ''); }
+  audioEl.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+  audioEl.play().catch(() => {});
+  if (window.speechSynthesis) { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(''); u.volume = 0; speechSynthesis.speak(u); }
+
+  await robotSpeak("Hi friend! I'm Robo! Talk to me!");
+  setState(State.IDLE);
+  setTimeout(() => startListening(), 500);
 }
 
 function stopConversation() {
-  conversationActive = false;
-  listening = false;
-  if (recognition) try { recognition.stop(); } catch(e) {}
-  talkBtn.classList.remove('listening');
-  talkBtn.textContent = '🎤';
-  talkLabel.textContent = 'Tap to start!';
+  conversationOn = false;
+  killRecognition();
+  setState(State.IDLE);
   bubble.textContent = "Tap the button to wake me up! 🤖";
 }
 
-// === BUTTON HANDLERS ===
+// Override startListening to check conversationOn
+const _startListening = startListening;
+startListening = function() {
+  if (!conversationOn) return;
+  _startListening();
+};
+
+// ============================================================
+// BUTTON HANDLERS
+// ============================================================
 let lastTap = 0;
 function onTap(e) {
   e.preventDefault();
-  if (conversationActive) {
-    stopConversation();
-  } else {
-    startConversation();
-  }
+  if (conversationOn) stopConversation();
+  else startConversation();
 }
 talkBtn.addEventListener('touchend', (e) => { lastTap = Date.now(); onTap(e); }, { passive: false });
 talkBtn.addEventListener('click', (e) => { if (Date.now() - lastTap < 500) return; onTap(e); });
@@ -467,26 +415,24 @@ talkBtn.addEventListener('click', (e) => { if (Date.now() - lastTap < 500) retur
 // Color buttons
 document.querySelectorAll('.color-btn').forEach(btn => {
   let lt = 0;
-  const handler = (e) => {
+  const handler = async (e) => {
     e.preventDefault();
     if (!audioEl) { audioEl = new Audio(); audioEl.setAttribute('playsinline', ''); }
     audioEl.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
     audioEl.play().catch(() => {});
 
-    const color = btn.dataset.color;
-    // Pause conversation temporarily
-    const wasActive = conversationActive;
-    if (recognition) try { recognition.stop(); } catch(e) {}
-    listening = false;
+    killRecognition();
+    const wasOn = conversationOn;
 
+    const color = btn.dataset.color;
     const eyes = document.querySelectorAll('.pupil');
     const colors = { red: '#ff4444', blue: '#3498db', green: '#2ecc71', yellow: '#f1c40f', purple: '#9b59b6' };
     eyes.forEach(el => { el.style.background = colors[color]; el.style.boxShadow = `0 0 12px ${colors[color]}`; });
     setTimeout(() => eyes.forEach(el => { el.style.background = '#00c8ff'; el.style.boxShadow = '0 0 8px #00c8ff'; }), 3000);
 
-    robotSpeak(colorResponses[color]).then(() => {
-      if (wasActive) setTimeout(() => startListening(), 300);
-    });
+    await robotSpeak(colorResponses[color]);
+    setState(State.IDLE);
+    if (wasOn) setTimeout(() => startListening(), 500);
   };
   btn.addEventListener('touchend', (e) => { lt = Date.now(); handler(e); }, { passive: false });
   btn.addEventListener('click', (e) => { if (Date.now() - lt < 500) return; handler(e); });
@@ -501,11 +447,7 @@ document.addEventListener('touchmove', (e) => {
   document.getElementById('pupilR').style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 });
 
-// Load voices for fallback
-if (window.speechSynthesis) {
-  speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-}
+if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
 </script>
 </body>
 </html>
