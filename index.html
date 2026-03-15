@@ -332,11 +332,11 @@ body {
   <div class="talk-label" id="talkLabel">Tap to talk!</div>
 
   <div class="color-btns">
-    <button class="color-btn" style="background:#ff6b6b" onclick="robotReact('red')">❤️</button>
-    <button class="color-btn" style="background:#3498db" onclick="robotReact('blue')">💙</button>
-    <button class="color-btn" style="background:#2ecc71" onclick="robotReact('green')">💚</button>
-    <button class="color-btn" style="background:#f1c40f" onclick="robotReact('yellow')">⭐</button>
-    <button class="color-btn" style="background:#9b59b6" onclick="robotReact('purple')">💜</button>
+    <button class="color-btn" data-color="red" style="background:#ff6b6b">❤️</button>
+    <button class="color-btn" data-color="blue" style="background:#3498db">💙</button>
+    <button class="color-btn" data-color="green" style="background:#2ecc71">💚</button>
+    <button class="color-btn" data-color="yellow" style="background:#f1c40f">⭐</button>
+    <button class="color-btn" data-color="purple" style="background:#9b59b6">💜</button>
   </div>
 
   <div class="no-speech" id="noSpeech" style="display:none">
@@ -477,16 +477,20 @@ function robotSpeak(text) {
                       voices.find(v => v.lang.startsWith('en'));
     if (goodVoice) utter.voice = goodVoice;
 
-    utter.onend = () => {
+    let ended = false;
+    const finish = () => {
+      if (ended) return;
+      ended = true;
       mouth.classList.remove('talking');
       mouth.classList.add('happy');
       speaking = false;
       setTimeout(() => mouth.classList.remove('happy'), 2000);
     };
-    utter.onerror = () => {
-      mouth.classList.remove('talking');
-      speaking = false;
-    };
+    utter.onend = finish;
+    utter.onerror = finish;
+    // iOS sometimes doesn't fire onend — safety timeout
+    const words = text.split(' ').length;
+    setTimeout(finish, Math.max(3000, words * 500));
     synth.speak(utter);
   } else {
     setTimeout(() => {
@@ -596,26 +600,62 @@ function robotReact(color) {
   }, 3000);
 }
 
-// Button handler — must be direct user gesture for iOS mic permission
-talkBtn.addEventListener('touchend', function(e) {
+// iOS requires ALL audio (speechSynthesis + mic) to be unlocked from a user tap
+let audioUnlocked = false;
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  // Speak a silent utterance to unlock speechSynthesis on iOS
+  if (synth) {
+    const unlock = new SpeechSynthesisUtterance('');
+    unlock.volume = 0;
+    synth.speak(unlock);
+  }
+}
+
+function onTalkTap(e) {
   e.preventDefault();
+  e.stopPropagation();
+  unlockAudio();
   startListening();
+}
+
+// Use both touch and click but prevent double-fire
+let lastTap = 0;
+talkBtn.addEventListener('touchend', function(e) {
+  lastTap = Date.now();
+  onTalkTap(e);
 }, { passive: false });
 talkBtn.addEventListener('click', function(e) {
-  // Fallback for desktop / non-touch
-  if (!('ontouchend' in window)) startListening();
+  if (Date.now() - lastTap < 500) return; // Skip if touch just fired
+  onTalkTap(e);
 });
 
-// Load voices
+// Color buttons — touch + click with iOS unlock
+document.querySelectorAll('.color-btn').forEach(btn => {
+  let lastColorTap = 0;
+  btn.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    lastColorTap = Date.now();
+    unlockAudio();
+    robotReact(this.dataset.color);
+  }, { passive: false });
+  btn.addEventListener('click', function(e) {
+    if (Date.now() - lastColorTap < 500) return;
+    unlockAudio();
+    robotReact(this.dataset.color);
+  });
+});
+
+// Load voices early
 if (synth) {
   synth.getVoices();
   synth.onvoiceschanged = () => synth.getVoices();
 }
 
-// Initial greeting after short delay
-setTimeout(() => {
-  robotSpeak(greetings[Math.floor(Math.random() * greetings.length)]);
-}, 1000);
+// Don't auto-speak on load (iOS blocks it). Show text only.
+bubble.textContent = "Hi! I'm Robo! 🤖 Tap the big button to talk to me!";
 
 // Eye tracking (fun!)
 document.addEventListener('mousemove', (e) => {
