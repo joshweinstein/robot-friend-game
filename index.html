@@ -451,7 +451,6 @@ function findResponse(text) {
 }
 
 function robotSpeak(text) {
-  if (speaking) return;
   speaking = true;
   bubble.textContent = text;
   mouth.classList.add('talking');
@@ -461,42 +460,54 @@ function robotSpeak(text) {
   void armRight.offsetWidth;
   armRight.classList.add('wave');
 
-  if (synth) {
+  const cleanText = text.replace(/[^\w\s!?.,']/g, '').trim();
+  const words = cleanText.split(' ').length;
+
+  let ended = false;
+  const finish = () => {
+    if (ended) return;
+    ended = true;
+    mouth.classList.remove('talking');
+    mouth.classList.add('happy');
+    speaking = false;
+    setTimeout(() => mouth.classList.remove('happy'), 2000);
+  };
+
+  if (synth && cleanText) {
+    // iOS FIX: must cancel + short delay before new utterance
     synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text.replace(/[^\w\s!?.,']/g, ''));
-    utter.rate = 0.85;
-    utter.pitch = 1.6;
-    utter.volume = 1;
 
-    // Try to find a good voice
-    const voices = synth.getVoices();
-    const goodVoice = voices.find(v => v.name.includes('Samantha')) ||
-                      voices.find(v => v.name.includes('Karen')) ||
-                      voices.find(v => v.name.includes('Zarvox')) ||
-                      voices.find(v => v.lang.startsWith('en') && v.name.includes('Female')) ||
-                      voices.find(v => v.lang.startsWith('en'));
-    if (goodVoice) utter.voice = goodVoice;
-
-    let ended = false;
-    const finish = () => {
-      if (ended) return;
-      ended = true;
-      mouth.classList.remove('talking');
-      mouth.classList.add('happy');
-      speaking = false;
-      setTimeout(() => mouth.classList.remove('happy'), 2000);
-    };
-    utter.onend = finish;
-    utter.onerror = finish;
-    // iOS sometimes doesn't fire onend — safety timeout
-    const words = text.split(' ').length;
-    setTimeout(finish, Math.max(3000, words * 500));
-    synth.speak(utter);
-  } else {
     setTimeout(() => {
-      mouth.classList.remove('talking');
-      speaking = false;
-    }, 2000);
+      const utter = new SpeechSynthesisUtterance(cleanText);
+      utter.rate = 0.85;
+      utter.pitch = 1.6;
+      utter.volume = 1;
+
+      // Pick a voice — reload every time (iOS loads them lazily)
+      const voices = synth.getVoices();
+      if (voices.length > 0) {
+        const goodVoice = voices.find(v => v.name === 'Samantha') ||
+                          voices.find(v => v.name === 'Karen') ||
+                          voices.find(v => v.lang === 'en-US') ||
+                          voices.find(v => v.lang.startsWith('en')) ||
+                          voices[0];
+        if (goodVoice) utter.voice = goodVoice;
+      }
+
+      utter.onend = finish;
+      utter.onerror = (e) => { console.log('TTS error:', e); finish(); };
+
+      // iOS safety timeout (onend often doesn't fire)
+      setTimeout(finish, Math.max(4000, words * 600));
+
+      synth.speak(utter);
+
+      // iOS fix: resume in case it auto-paused
+      setTimeout(() => { if (synth.paused) synth.resume(); }, 100);
+      setTimeout(() => { if (synth.paused) synth.resume(); }, 500);
+    }, 50);
+  } else {
+    setTimeout(finish, Math.max(2000, words * 400));
   }
 }
 
@@ -600,18 +611,17 @@ function robotReact(color) {
   }, 3000);
 }
 
-// iOS requires ALL audio (speechSynthesis + mic) to be unlocked from a user tap
+// iOS speechSynthesis workarounds
 let audioUnlocked = false;
+
+// iOS bug: speechSynthesis pauses itself after ~15s. This keeps it alive.
+setInterval(() => {
+  if (synth && synth.paused) synth.resume();
+}, 5000);
 
 function unlockAudio() {
   if (audioUnlocked) return;
   audioUnlocked = true;
-  // Speak a silent utterance to unlock speechSynthesis on iOS
-  if (synth) {
-    const unlock = new SpeechSynthesisUtterance('');
-    unlock.volume = 0;
-    synth.speak(unlock);
-  }
 }
 
 function onTalkTap(e) {
