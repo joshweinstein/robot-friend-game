@@ -365,6 +365,10 @@ function startConversation() {
 function startListening() {
   if (!SpeechRecognition || listening || speaking) {
     if (!SpeechRecognition) bubble.textContent = "Tap the color buttons to play! 🎨";
+    if (speaking && conversationActive) {
+      // Retry after speaking finishes
+      setTimeout(() => startListening(), 500);
+    }
     return;
   }
 
@@ -395,12 +399,12 @@ function startListening() {
       talkLabel.textContent = 'Robo is thinking...';
 
       const response = findResponse(text);
-      // Small delay so kid sees what they said
+      // Stop mic, let kid see what they said, then robot talks, then mic restarts
+      if (recognition) try { recognition.stop(); } catch(e) {}
       setTimeout(async () => {
         await robotSpeak(response);
-        // Auto-restart listening for continuous conversation
         if (conversationActive) {
-          setTimeout(() => startListening(), 300);
+          setTimeout(() => startListening(), 400);
         }
       }, 600);
     }
@@ -410,8 +414,7 @@ function startListening() {
     console.log('Mic error:', event.error);
     listening = false;
     talkBtn.classList.remove('listening');
-    if (event.error === 'no-speech' && conversationActive) {
-      // Just restart silently
+    if (event.error === 'no-speech' && conversationActive && !speaking) {
       talkBtn.textContent = '🎤';
       talkLabel.textContent = 'Say something!';
       setTimeout(() => startListening(), 500);
@@ -424,9 +427,8 @@ function startListening() {
   };
 
   recognition.onend = () => {
-    if (listening && !gotFinal && conversationActive) {
-      // Silently restart if nothing was said
-      listening = false;
+    listening = false;
+    if (!gotFinal && conversationActive && !speaking) {
       setTimeout(() => startListening(), 300);
     }
   };
