@@ -550,11 +550,12 @@ function startListening() {
     if (result.isFinal && !gotResult) {
       gotResult = true;
       console.log('Heard:', text);
+      const response = findResponse(text);
       stopListening();
-      setTimeout(() => {
-        const response = findResponse(text);
+      // iOS: reclaim audio session after mic released, then speak
+      reclaimAudio().then(() => {
         robotSpeak(response);
-      }, 500);
+      });
     }
   };
 
@@ -573,7 +574,9 @@ function startListening() {
   recognition.onend = () => {
     if (!gotResult && listening) {
       stopListening();
-      robotSpeak("I didn't hear anything! Tap and try again! 🤖");
+      reclaimAudio().then(() => {
+        robotSpeak("I didn't hear anything! Tap and try again! 🤖");
+      });
     }
   };
 
@@ -613,15 +616,35 @@ function robotReact(color) {
 
 // iOS speechSynthesis workarounds
 let audioUnlocked = false;
+let audioCtx = null;
 
 // iOS bug: speechSynthesis pauses itself after ~15s. This keeps it alive.
 setInterval(() => {
   if (synth && synth.paused) synth.resume();
 }, 5000);
 
+// Reclaim audio session after mic use — plays a tiny silent buffer
+function reclaimAudio() {
+  return new Promise(resolve => {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const buf = audioCtx.createBuffer(1, 1, 22050);
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+      src.connect(audioCtx.destination);
+      src.onended = resolve;
+      src.start(0);
+    } catch(e) {
+      resolve();
+    }
+  });
+}
+
 function unlockAudio() {
   if (audioUnlocked) return;
   audioUnlocked = true;
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
 
 function onTalkTap(e) {
