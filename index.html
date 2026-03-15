@@ -370,6 +370,7 @@ let recognition = null;
 let synth = window.speechSynthesis;
 let listening = false;
 let speaking = false;
+let pendingReply = null; // queued reply waiting for user tap to speak
 
 // Check speech support
 const hasSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
@@ -552,10 +553,7 @@ function startListening() {
       console.log('Heard:', text);
       const response = findResponse(text);
       stopListening();
-      // iOS: reclaim audio session after mic released, then speak
-      reclaimAudio().then(() => {
-        robotSpeak(response);
-      });
+      queueReply(response);
     }
   };
 
@@ -563,20 +561,18 @@ function startListening() {
     console.log('Speech error:', event.error);
     stopListening();
     if (event.error === 'no-speech') {
-      robotSpeak("I didn't hear anything! Try again! 🤖");
+      queueReply("I didn't hear anything! Try again! 🤖");
     } else if (event.error === 'not-allowed') {
       bubble.textContent = "Please allow microphone access! 🎤";
     } else {
-      robotSpeak("Oops! Try again! 🤖");
+      queueReply("Oops! Try again! 🤖");
     }
   };
 
   recognition.onend = () => {
     if (!gotResult && listening) {
       stopListening();
-      reclaimAudio().then(() => {
-        robotSpeak("I didn't hear anything! Tap and try again! 🤖");
-      });
+      queueReply("I didn't hear anything! Tap and try again! 🤖");
     }
   };
 
@@ -647,11 +643,38 @@ function unlockAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 }
 
+function queueReply(text) {
+  // Show the reply text and change button to play mode
+  pendingReply = text;
+  bubble.textContent = text;
+  mouth.classList.add('happy');
+  talkBtn.textContent = '🔊';
+  talkBtn.classList.remove('listening');
+  talkBtn.style.background = 'linear-gradient(145deg, #9b59b6, #8e44ad)';
+  talkLabel.textContent = "Tap to hear Robo! 🔊";
+}
+
+function playReply() {
+  const text = pendingReply;
+  pendingReply = null;
+  talkBtn.textContent = '🎤';
+  talkBtn.style.background = '';
+  talkLabel.textContent = 'Tap to talk!';
+  mouth.classList.remove('happy');
+  robotSpeak(text);
+}
+
 function onTalkTap(e) {
   e.preventDefault();
   e.stopPropagation();
   unlockAudio();
-  startListening();
+
+  if (pendingReply) {
+    // There's a queued reply — play it (this is a fresh user gesture, iOS allows it)
+    playReply();
+  } else if (!listening && !speaking) {
+    startListening();
+  }
 }
 
 // Use both touch and click but prevent double-fire
